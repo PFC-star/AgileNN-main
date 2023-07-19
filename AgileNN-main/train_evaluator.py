@@ -18,6 +18,7 @@ def construct_effnetv2(image_size=224, num_classes=100):
     model.add(tf.keras.layers.GlobalAveragePooling2D())
     model.add(tf.keras.layers.Dropout(0.5))
     model.add(tf.keras.layers.Dense(num_classes))
+    print(model)
     return model
 
 
@@ -115,7 +116,7 @@ def train_effnetv2_on_cifar10(run_name, logdir):
 def train_effnetv2_on_cifar100(run_name, logdir):
     model = construct_effnetv2(num_classes=100)
     
-    ds = tfds.load('cifar100', as_supervised=True)
+    ds = tfds.load('cifar100', as_supervised=True,data_dir='../dataset')
     
     def prep(x, y):
         x = tf.cast(x, tf.float32)/255.
@@ -295,10 +296,10 @@ def train_effnetv2_on_svhn(run_name, logdir):
 
 
 def train_effnetv2_on_imagenet200(run_name, logdir):
-    model = construct_effnetv2(num_classes=200)
+    # model = construct_effnetv2(num_classes=200)
     
     tiny_imagenet_builder = TinyImagenetDataset()
-    tiny_imagenet_builder.download_and_prepare()
+    tiny_imagenet_builder.download_and_prepare(download_dir='../dataset')
     train_dataset = tiny_imagenet_builder.as_dataset(split="train")
     test_dataset = tiny_imagenet_builder.as_dataset(split="validation")
     
@@ -415,7 +416,7 @@ def construct_evaluator(model_path, feature_size=32, num_classes=100):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Reference NN training configs')
-    parser.add_argument('--dataset', type=str, default='cifar100', help='valid datasets are cifar10, cifar100, svhn, imagenet200')
+    parser.add_argument('--dataset', type=str, default='imagenet200', help='valid datasets are cifar10, cifar100, svhn, imagenet200')
     args = parser.parse_args()
     dataset = args.dataset
     if dataset == 'cifar10':
@@ -428,5 +429,4 @@ if __name__ == '__main__':
         train_effnetv2_on_imagenet200('effnetv2_pretrained', 'logs')
     else:
         raise NotImplementedError("This dataset has not been implemented yet")
-    
     

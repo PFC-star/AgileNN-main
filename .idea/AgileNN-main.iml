@@ -4,7 +4,7 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/AgileNN-main" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.6 (tensorflowCPU)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Remote Python 3.8.10 (sftp://root@region-41.seetacloud.com:57184/root/miniconda3/bin/python) (2)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">
