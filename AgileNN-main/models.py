@@ -1,5 +1,9 @@
+import math
+import random
+
 import tensorflow as tf
 import numpy as np
+
 
 
 class Quantization_Layer(tf.keras.layers.Layer):
@@ -32,6 +36,7 @@ class Quantization_Layer(tf.keras.layers.Layer):
 def _conv_bn_lite(out, strides=3, dilation_rate=3, data_format='channels_last'):
     axis = 1 if data_format == "channels_first" else 3
     return tf.keras.Sequential([
+        # 可分离卷积层
         tf.keras.layers.SeparableConv2D(4, 3, strides=strides, dilation_rate=dilation_rate, padding='same', use_bias=False, data_format=data_format),
         tf.keras.layers.BatchNormalization(axis=axis),
         tf.keras.layers.ReLU(max_value=6),
@@ -43,7 +48,9 @@ def _conv_bn_lite(out, strides=3, dilation_rate=3, data_format='channels_last'):
 
 def _local_predictor(num_classes, data_format):
     return tf.keras.Sequential([
+        # 全局平均池化层
         tf.keras.layers.GlobalAveragePooling2D(data_format=data_format),
+        # 全连接层 输出为 num_classes
         tf.keras.layers.Dense(num_classes),
         tf.keras.layers.BatchNormalization(),
     ], name="l_predictor")
@@ -80,7 +87,7 @@ class Linear(tf.keras.layers.Layer):
             shape=(1, units), initializer="random_normal", trainable=True, name='reweighting_w'
         )
 
-    def call(self, local_out, remote_out, T=1.0):
+    def call(self, local_out, remote_out, T=6.0):
         w_normalized = tf.nn.softmax(self.w / T, axis=-1)
         w1 = w_normalized[:, 0] # (1, 1)
         w2 = w_normalized[:, 1] # (1, 1)
@@ -157,9 +164,9 @@ class MobileNetV2_AgileNN(tf.keras.Model):
         super(MobileNetV2_AgileNN, self).__init__()
         data_format = data_format or 'channels_last'
         assert data_format in ['channels_first', 'channels_last']
-        self.K_top = int(np.round(split_ratio * 24))
+        self.K_top = int(np.round(split_ratio * 24))  # 5 在本地推理的
         width_multiplier = 1.5
-        input_channel = int(width_multiplier * 16) # 24
+        input_channel = int(width_multiplier * 16) # 24 第一个卷积层的输出通道数
         inverted_residual_config = [
             # t (expand ratio), channel, n (layers), stride
             [1, 16, 1, 1],
@@ -173,7 +180,7 @@ class MobileNetV2_AgileNN(tf.keras.Model):
         self.feature_extractor_1 = _conv_bn_lite(input_channel, conv1_stride, 1, data_format=data_format) # stride=2 for tinyimagenet   
         self.local_predictor_1 = _local_predictor(classes, data_format=data_format)
         self.remote_predictor_1 = _remote_predictor(classes, inverted_residual_config, 16, data_format=data_format)
-        self.q_layer = Quantization_Layer(num_centroids=num_centroids)
+        self.q_layer = Quantization_Layer(num_centroids=num_centroids) # ？
         self.reweighting_1 = Linear()
         
     def call(self, inputs, training=False):
