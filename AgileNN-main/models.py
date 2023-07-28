@@ -30,7 +30,7 @@ class Quantization_Layer(tf.keras.layers.Layer):
             axis=-1) * centroids[tf.newaxis, tf.newaxis, tf.newaxis, :, :] # (None, 32, 32, 19, c)
         y_soft = tf.math.reduce_sum(y_soft_1, axis=-1)
 
-        return y_soft + tf.stop_gradient(y_hard - y_soft), c_indices
+        return y_soft + tf.stop_gradient(y_hard - y_soft), c_indices,centroids
 
 
 def _conv_bn_lite(out, strides=3, dilation_rate=3, data_format='channels_last'):

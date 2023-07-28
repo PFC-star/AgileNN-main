@@ -1,46 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="root@region-41.seetacloud.com:33088">
+  <component name="PublishConfigData" autoUpload="Always">
     <serverData>
       <paths name="root@connect.beijinga.seetacloud.com:47304">
         <serverdata>
           <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="root@hz-t3.matpool.com:27779">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="root@region-41.seetacloud.com:33088">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/root/autodl-fs/AgileNN-main/AgileNN-main" local="$PROJECT_DIR$/AgileNN-main" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="root@region-41.seetacloud.com:57184">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/root/autodl-fs/AgileNN-main/AgileNN-main" local="$PROJECT_DIR$/AgileNN-main" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="root@region-41.seetacloud.com:57184 password">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="root@region-41.seetacloud.com:57184 password (1)">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/root/autodl-fs/AgileNN-main/AgileNN-main" local="$PROJECT_DIR$/AgileNN-main" web="/" />
           </mappings>
         </serverdata>
       </paths>
